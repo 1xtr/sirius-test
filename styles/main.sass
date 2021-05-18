@@ -1,2 +1,30 @@
+@function calcFluidFontSize($f-min, $f-max, $v-min, $v-max)
+  $k: ($f-max - $f-min)/($v-max - $v-min)
+  $b: $f-min - $k * $v-min
+  $b: $b * 1px
+  @return calc( #{$k} * 100vw + #{$b} )
+
+@mixin fluidFontSize($f-min, $f-max, $w-min, $w-max, $fallback: false)
+  font-size: $f-min + px
+  @media (min-width: $w-min+px)
+    @if ($fallback)
+      font-size: $fallback
+    font-size: calcFluidFontSize($f-min, $f-max, $w-min, $w-max)
+  @media (min-width: $w-max+px)
+    font-size: $f-max + px
+
+html,
 body
   font-family: 'Roboto', sans-serif
+  background: #F7F9FF
+
+*
+  margin: 0
+  padding: 0
+  box-sizing: border-box
+
+.wordPart
+  @include fluidFontSize(12, 60, 320, 1440)
+
+.separator
+  @include fluidFontSize(20, 100, 320, 1440)
